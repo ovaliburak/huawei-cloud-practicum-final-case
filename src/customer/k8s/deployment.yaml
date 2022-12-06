@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer
+  labels:
+    app: customer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customer
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 3
+  template:
+    metadata:
+      labels:
+        app: customer
+    spec:
+      containers:
+        - name: hr
+          image: docker.io/burakovali/customer:latest
+          ports:
+            - containerPort: 4000
+          envFrom:
+            - configMapRef:
+                name: customer-configmap
+            - secretRef:
+                name: customer-secret
