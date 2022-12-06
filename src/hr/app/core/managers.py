@@ -14,7 +14,8 @@ class UserManager(BaseUserManager):
         user = self.model(
             phone_number=phone_number
         )
-
+        user.is_admin=False
+        user.is_staff=False
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -29,5 +30,7 @@ class UserManager(BaseUserManager):
             password=password,
         )
         user.is_admin = True
+        user.is_staff = True
+        user.is_superuser = True
         user.save(using=self._db)
         return user
