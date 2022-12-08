@@ -4,7 +4,7 @@ from rest_framework import exceptions
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from rest_framework.renderers import JSONRenderer
 from .models import User, UserToken
 from .authentication import JWTAuthentication
 from .serializers import UserSerializer
@@ -13,10 +13,9 @@ from .serializers import UserSerializer
 class RegisterAPIView(APIView):
     def post(self, request):
         data = request.data
-
+        print(data)
         if data['password'] != data['password_confirm']:
             raise exceptions.APIException('Passwords do not match!')
-
         serializer = UserSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -25,11 +24,11 @@ class RegisterAPIView(APIView):
 
 class LoginAPIView(APIView):
     def post(self, request):
-        email = request.data['email']
+        phone_number = request.data['phone_number']
         password = request.data['password']
         scope = request.data['scope']
 
-        user = User.objects.filter(email=email).first()
+        user = User.objects.filter(phone_number=phone_number).first()
 
         if user is None:
             raise exceptions.AuthenticationFailed('User not found!')
@@ -57,17 +56,15 @@ class LoginAPIView(APIView):
 class UserAPIView(APIView):
     def get(self, request, scope=''):
         token = request.COOKIES.get('jwt')
-
         if not token:
             raise exceptions.AuthenticationFailed('unauthenticated')
 
         payload = JWTAuthentication.get_payload(token)
 
         user = User.objects.get(pk=payload['user_id'])
-
+        print(user)
         if user is None:
             raise exceptions.AuthenticationFailed('User not found!')
-
         if not UserToken.objects.filter(user_id=user.id,
                                         token=token,
                                         expired_at__gt=datetime.datetime.now(tz=datetime.timezone.utc)
@@ -77,10 +74,8 @@ class UserAPIView(APIView):
         scope_admin_user_employee = user.is_employee and payload['scope'] != 'employee'
         scope_employee_user_admin = not user.is_employee and payload['scope'] != 'admin'
         scope_path_different = payload['scope'] != scope
-
         if scope_admin_user_employee or scope_employee_user_admin or scope_path_different:
             raise exceptions.AuthenticationFailed('unauthorized')
-
         return Response(UserSerializer(user).data)
 
 
@@ -89,19 +84,22 @@ class LogoutAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        UserToken.objects.delete(user_id=request.user.id)
-
+        print("CALISIYOR MU?")
+        print(request.user)
+        a = UserToken.objects.filter(user_id=request.user.id)
+        a.delete()
         return Response({
             'message': 'success'
         })
 
 
 class ProfileInfoAPIView(APIView):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [JWTAuthentication]
+    # permission_classes = [IsAuthenticated]
 
     def put(self, request, pk=None):
         user = request.user
+        print("deneme")
         serializer = UserSerializer(user, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()

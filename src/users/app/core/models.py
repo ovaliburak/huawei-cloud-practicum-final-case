@@ -40,15 +40,11 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractUser):
-    email = models.EmailField(db_index=True, blank=False, null=True, unique=True)
-    first_name = models.CharField(
-        db_index=True, blank=False, null=False, max_length=100
-    )
-    middle_name = models.CharField(db_index=True, blank=True, null=True, max_length=100)
-    last_name = models.CharField(db_index=True, blank=True, null=True, max_length=100)
-    phone_number = models.CharField(
-        db_index=True, blank=True, null=True, max_length=100, unique=True
-    )
+    email = models.EmailField(db_index=True, unique=True)
+    first_name = models.CharField(max_length=100)
+    middle_name = models.CharField(blank=True, null=True, max_length=100)
+    last_name = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=100, unique=True)
     password = models.CharField(max_length=255)
     is_employee = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)
