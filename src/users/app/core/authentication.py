@@ -9,20 +9,28 @@ from core.models import User, UserToken
 class JWTAuthentication(BaseAuthentication):
 
     def authenticate(self, request):
-        is_employee = 'api/employee' in request.path
+        print(request.path)
+        # is_employee = 'api/employee' in request.path
 
         token = request.COOKIES.get('jwt')
+        print("BOOOM")
 
         if not token:
             return None
 
         payload = JWTAuthentication.get_payload(token)
+        if payload.get("scope") == "employee":
+            is_employee=True
+        else:
+            is_employee=False
+        print(is_employee)
+                
+        
 
         if (is_employee and payload['scope'] != 'employee') or (not is_employee and payload['scope'] != 'admin'):
             raise exceptions.AuthenticationFailed('Invalid Scope!')
 
         user = User.objects.get(pk=payload['user_id'])
-
         if user is None:
             raise exceptions.AuthenticationFailed('User not found!')
 
@@ -31,7 +39,6 @@ class JWTAuthentication(BaseAuthentication):
                                         expired_at__gt=datetime.datetime.now(tz=datetime.timezone.utc)
                                         ).exists():
             raise exceptions.AuthenticationFailed('unauthenticated')
-
         return (user, None)
 
     @staticmethod
