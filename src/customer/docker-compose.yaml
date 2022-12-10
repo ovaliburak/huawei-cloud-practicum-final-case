@@ -1,0 +1,16 @@
+version: "3"
+services:
+  postgres_db:
+    image: postgres
+    restart: always
+    command: -p 5439
+    env_file:
+      - ./app/.env
+    expose:
+      - 5439
+    ports:
+      - "5439:5439"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+volumes:
+  postgres_data:
