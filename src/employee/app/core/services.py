@@ -21,3 +21,12 @@ class UserService:
         headers = kwargs.get('headers', [])
         data = kwargs.get('data', [])
         return requests.put(UserService.endpoint + path, data=data, headers=headers).json()
+
+class CustomerService:
+    endpoint="http://127.0.0.1:8002" + "/api/"
+
+    @staticmethod
+    def get(path):
+        print(requests.get(CustomerService.endpoint + path))
+        return requests.get(CustomerService.endpoint + path).json()
+
