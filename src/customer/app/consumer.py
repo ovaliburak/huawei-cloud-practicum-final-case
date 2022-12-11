@@ -19,9 +19,7 @@ channel.queue_declare(queue="customer")
 
 
 def callback(ch, method, properties, body):
-    print("Received in customer")
     data = json.loads(body)
-
     if properties.content_type == "customer_created":
         try:
             employee = Employee.objects.get(id=data.get("employee_id"))
@@ -33,26 +31,25 @@ def callback(ch, method, properties, body):
                 employee_phone_number=data.get("employee_phone_number"),
             )
             employee.save()
-        customer = Customer.objects.create(
-            first_name=data.get("first_name"),
-            last_name=data.get("last_name"),
-            phone_number=data.get("phone_number"),
-            employee=employee,
-        )
-        print(customer)
+        try:
+            customer = Customer.objects.get(phone_number=data.get("phone_number"))
+        except Customer.DoesNotExist:
+            customer = Customer.objects.create(
+                first_name=data.get("first_name"),
+                last_name=data.get("last_name"),
+                phone_number=data.get("phone_number"),
+                employee=employee,
+            )
+            customer.save()
+    # elif properties.content_type == "customer_updated":
+        # product = Product.query.get(data["id"])
+        # product.title = data["title"]
+        # product.image = data["image"]
+        # db.session.commit()
+        # print("Product Updated")
 
-    elif properties.content_type == "product_updated":
-        product = Product.query.get(data["id"])
-        product.title = data["title"]
-        product.image = data["image"]
-        db.session.commit()
-        print("Product Updated")
-
-    elif properties.content_type == "product_deleted":
-        product = Product.query.get(data)
-        db.session.delete(product)
-        db.session.commit()
-        print("Product Deleted")
+    elif properties.content_type == "customer_deleted":
+        Customer.objects.filter(phone_number=data.get("phone_number")).delete()
 
 
 channel.basic_consume(queue="customer", on_message_callback=callback, auto_ack=True)
