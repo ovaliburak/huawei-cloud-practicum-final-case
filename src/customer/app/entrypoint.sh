@@ -1,4 +1,5 @@
 #!/bin/bash
-APP_PORT=${PORT:-4000}
+APP_PORT=${PORT:-8002}
 cd /app/
-/opt/venv/bin/gunicorn --worker-tmp-dir /dev/shm customer.wsgi:application --bind "0.0.0.0:${APP_PORT}"
+exec python consumer.py &
+gunicorn --worker-tmp-dir /dev/shm customer.wsgi:application --bind "0.0.0.0:${APP_PORT}"

@@ -1,0 +1,119 @@
+Traceback (most recent call last):
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/customer/app/consumer.py", line 13, in <module>
+    connection = pika.BlockingConnection(params)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/pika/adapters/blocking_connection.py", line 360, in __init__
+    self._impl = self._create_connection(parameters, _impl_class)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/pika/adapters/blocking_connection.py", line 451, in _create_connection
+    raise self._reap_last_connection_workflow_error(error)
+pika.adapters.utils.connection_workflow.AMQPConnectorStackTimeout: Timeout during AMQP handshake'albatross.rmq.cloudamqp.com'/(<AddressFamily.AF_INET: 2>, <SocketKind.SOCK_STREAM: 1>, 6, '', ('35.192.131.179', 5671)); ssl=True
+Started Consuming
+b'{"first_name": "Onur Saf", "last_name": "Deniz", "phone_number": "555174742315", "email": "deniz@den.com", "employee_id": 3, "employee_first_name": "b", "employee_last_name": "c", "employee_email": "c@c23.com", "employee_phone_number": "1231235", "employee_is_employee": true}'
+{'first_name': 'Onur Saf', 'last_name': 'Deniz', 'phone_number': '555174742315', 'email': 'deniz@den.com', 'employee_id': 3, 'employee_first_name': 'b', 'employee_last_name': 'c', 'employee_email': 'c@c23.com', 'employee_phone_number': '1231235', 'employee_is_employee': True}
+b'{"first_name": "Onur Saf", "last_name": "Deniz", "phone_number": "555174742315", "email": "deniz@den.com", "employee_id": 3, "employee_first_name": "b", "employee_last_name": "c", "employee_email": "c@c23.com", "employee_phone_number": "1231235", "employee_is_employee": true}'
+Traceback (most recent call last):
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/django/db/backends/base/base.py", line 219, in ensure_connection
+    self.connect()
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/django/utils/asyncio.py", line 33, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/django/db/backends/base/base.py", line 200, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/django/utils/asyncio.py", line 33, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/django/db/backends/postgresql/base.py", line 187, in get_new_connection
+    connection = Database.connect(**conn_params)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.OperationalError: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: No such file or directory
+	Is the server running locally and accepting connections on that socket?
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/customer/app/consumer.py", line 61, in <module>
+    channel.start_consuming()
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/pika/adapters/blocking_connection.py", line 1883, in start_consuming
+    self._process_data_events(time_limit=None)
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/pika/adapters/blocking_connection.py", line 2044, in _process_data_events
+    self.connection.process_data_events(time_limit=time_limit)
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/pika/adapters/blocking_connection.py", line 851, in process_data_events
+    self._dispatch_channel_events()
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/pika/adapters/blocking_connection.py", line 567, in _dispatch_channel_events
+    impl_channel._get_cookie()._dispatch_events()
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/pika/adapters/blocking_connection.py", line 1510, in _dispatch_events
+    consumer_info.on_message_callback(self, evt.method,
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/customer/app/consumer.py", line 27, in callback
+    employee = Employee.objects.get(id=data.get("employee_id"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/django/db/models/query.py", line 431, in get
+    num = len(clone)
+          ^^^^^^^^^^
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/django/db/models/query.py", line 262, in __len__
+    self._fetch_all()
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/django/db/models/query.py", line 1324, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/django/db/models/query.py", line 51, in __iter__
+    results = compiler.execute_sql(chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/django/db/models/sql/compiler.py", line 1173, in execute_sql
+    cursor = self.connection.cursor()
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/django/utils/asyncio.py", line 33, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/django/db/backends/base/base.py", line 259, in cursor
+    return self._cursor()
+           ^^^^^^^^^^^^^^
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/django/db/backends/base/base.py", line 235, in _cursor
+    self.ensure_connection()
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/django/utils/asyncio.py", line 33, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/django/db/backends/base/base.py", line 218, in ensure_connection
+    with self.wrap_database_errors:
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/django/db/utils.py", line 90, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/django/db/backends/base/base.py", line 219, in ensure_connection
+    self.connect()
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/django/utils/asyncio.py", line 33, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/django/db/backends/base/base.py", line 200, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/django/utils/asyncio.py", line 33, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/django/db/backends/postgresql/base.py", line 187, in get_new_connection
+    connection = Database.connect(**conn_params)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: No such file or directory
+	Is the server running locally and accepting connections on that socket?
+
+Started Consuming
+Traceback (most recent call last):
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/customer/app/consumer.py", line 61, in <module>
+    channel.start_consuming()
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/pika/adapters/blocking_connection.py", line 1883, in start_consuming
+    self._process_data_events(time_limit=None)
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/pika/adapters/blocking_connection.py", line 2044, in _process_data_events
+    self.connection.process_data_events(time_limit=time_limit)
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/pika/adapters/blocking_connection.py", line 842, in process_data_events
+    self._flush_output(common_terminator)
+  File "/home/burak/Documents/huawei-cloud-practicum-final-case/src/product/venv/lib64/python3.11/site-packages/pika/adapters/blocking_connection.py", line 523, in _flush_output
+    raise self._closed_result.value.error
+pika.exceptions.StreamLostError: Stream connection lost: SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:2393)')

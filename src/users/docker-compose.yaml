@@ -1,6 +1,18 @@
 version: "3"
 services:
-  postgres_db:
+  user:
+    depends_on:
+      - postgres_user
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    image: burakovali/users
+    env_file:
+      - ./app/.env
+    ports:
+      - "8000:8000"
+
+  postgres_user:
     image: postgres
     restart: always
     command: -p 5438
