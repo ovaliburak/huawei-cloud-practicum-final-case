@@ -8,3 +8,5 @@ django-cors-headers
 django.dotenv
 gunicorn
 djangorestframework-simplejwt
+pika
+pynvim

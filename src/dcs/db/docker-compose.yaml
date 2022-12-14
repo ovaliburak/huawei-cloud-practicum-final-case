@@ -1,0 +1,60 @@
+version: "3"
+services:
+  postgres_customer:
+    image: postgres
+    restart: always
+    command: -p 5439
+    env_file:
+      - ../../customer/app/.env
+    expose:
+      - 5439
+    ports:
+      - "5439:5439"
+    volumes:
+      - postgres_data_customer:/var/lib/postgresql/data/
+
+  postgres_user:
+    image: postgres
+    restart: always
+    command: -p 5438
+    env_file:
+      - ../../users/app/.env
+    expose:
+      - 5438
+    ports:
+      - "5438:5438"
+    volumes:
+      - postgres_data_user:/var/lib/postgresql/data/
+  
+  postgres_employee:
+    image: postgres
+    restart: always
+    command: -p 5440
+    env_file:
+      - ../../employee/app/.env
+    expose:
+      - 5440
+    ports:
+      - "5440:5440"
+    volumes:
+      - postgres_data_employee:/var/lib/postgresql/data/
+  
+  postgres_product:
+    image: postgres
+    restart: always
+    command: -p 5442
+    env_file:
+      - ../../product/app/.env
+    expose:
+      - 5442
+    ports:
+      - "5442:5442"
+    volumes:
+      - postgres_data_product:/var/lib/postgresql/data/
+
+volumes:
+  postgres_data_user:
+  postgres_data_product:
+  postgres_data_customer:
+  postgres_data_employee:
+

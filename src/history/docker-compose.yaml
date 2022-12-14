@@ -1,0 +1,17 @@
+version: "3"
+services:
+
+  postgres_history:
+    image: postgres
+    restart: always
+    command: -p 5458
+    env_file:
+      - ./app/.env
+    expose:
+      - 5458
+    ports:
+      - "5458:5458"
+    volumes:
+      - postgres_data_history:/var/lib/postgresql/data/
+volumes:
+  postgres_data_history:

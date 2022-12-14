@@ -1,16 +1,16 @@
 version: "3"
 services:
-  postgres_db:
+  postgres_product:
     image: postgres
     restart: always
-    command: -p 5440
+    command: -p 5448
     env_file:
       - ./app/.env
     expose:
-      - 5440
+      - 5448
     ports:
-      - "5440:5440"
+      - "5448:5448"
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - postgres_product_dev:/var/lib/postgresql/data/
 volumes:
-  postgres_data:
+  postgres_product_dev:

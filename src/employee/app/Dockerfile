@@ -7,9 +7,9 @@ WORKDIR /app
 
 RUN pip install pip --upgrade
 RUN pip install -r requirements.txt
-RUN chmod +x entrypoint.sh \
-    chmod +x migrate.sh
+RUN chmod +x entrypoint.sh  
+RUN chmod +x migrate.sh
 
-RUN sh /app/migrate.sh
+# RUN /app/migrate.sh
 
 CMD ["/app/entrypoint.sh"]

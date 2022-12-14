@@ -8,3 +8,5 @@ django-autoslug
 django-cors-headers
 django.dotenv
 gunicorn
+pika
+pynvim

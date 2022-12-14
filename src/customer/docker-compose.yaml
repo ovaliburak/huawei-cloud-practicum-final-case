@@ -1,6 +1,29 @@
 version: "3"
 services:
-  postgres_db:
+  web:
+    depends_on:
+      - postgres_customer
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    #command: "python manage.py runserver 0.0.0.0:8002"
+    image: burakovali/customer
+    env_file:
+      - ./app/.env
+    ports:
+      - "8002:8002"
+  #rabbit:
+    #depends_on:
+      #- postgres_db
+    #build:
+      #context: ./app
+      #dockerfile: Dockerfile
+    #command: "python consumer.py"
+    #image: burakova/customer
+    #env_file:
+      #- ./app/.env
+
+  postgres_customer:
     image: postgres
     restart: always
     command: -p 5439
