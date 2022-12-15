@@ -9,7 +9,7 @@ class ProductSerializer(serializers.ModelSerializer):
         model=Product
         fields='__all__'
 
-class AdvertList(serializers.ModelSerializer):
+class AdvertListSerializer(serializers.ModelSerializer):
     employee=EmployeeSerializer(read_only=True)
     product=ProductSerializer(read_only=True)
     class Meta:
