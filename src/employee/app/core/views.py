@@ -12,6 +12,7 @@ from core.serializers import CustomerEmployeeSerializer
 from core.serializers import ProductEmployeeSerializer
 from core.serializers import AdvertEmployeeSerializer
 from core.serializers import HistorySerializer
+from core.serializers import DemandSerializer
 from django.http import QueryDict
 
 class RegisterAPIView(APIView):
@@ -130,7 +131,34 @@ class CreateHistoryView(APIView):
             return Response("Success")
         else:
             return Response("Authentication Required")
+class CreateDemandView(APIView):
+    def post(self, request):
+        if request.user_ms.get("detail") != "unauthenticated":
+            customer_path="customer/" + request.data.get("customer_id")
+            customer=CustomerService.get(customer_path)
+            print(customer.get("first_name"))
+            request.data.update({
 
+                "employee_id": request.user_ms.get("id"),
+                "employee_first_name": request.user_ms.get("first_name"),
+                "employee_last_name":request.user_ms.get("last_name"),
+                "employee_email":request.user_ms.get("email"),
+                "employee_is_employee":request.user_ms.get("is_employee"),
+                "employee_phone_number":request.user_ms.get("phone_number"),
+                "customer_id":customer.get("id"),
+                "customer_first_name":customer.get("first_name"),
+                "customer_last_name":customer.get("last_name"),
+                "customer_phone_number":customer.get("phone_number"),
+
+                
+            })
+            serializer = DemandSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            print(serializer.data)
+            publish("demand_created", "demand", serializer.data)
+            return Response("Success")
+        else:
+            return Response("Authentication Required")
 class ListProductView(APIView):
     def get(self, request):
         resp = ProductService.get("product_list")

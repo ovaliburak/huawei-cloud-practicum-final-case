@@ -1,0 +1,1 @@
+export POSTGRES_DB=history && export POSTGRES_HOST=0.0.0.0 && export POSTGRES_USER=root && export POSTGRES_PORT=5458 && export POSTGRES_PASSWORD=0074

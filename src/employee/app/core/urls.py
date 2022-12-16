@@ -13,5 +13,6 @@ urlpatterns = [
     path("advert_list/", views.ListAdvertView.as_view()),
     path("create_history/", views.CreateHistoryView.as_view()),
     path("history_list/", views.ListHistoryView.as_view()),
+    path("create_demand/", views.CreateDemandView.as_view()),
 
 ]
