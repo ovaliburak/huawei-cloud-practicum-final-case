@@ -13,6 +13,8 @@ from core.serializers import ProductEmployeeSerializer
 from core.serializers import AdvertEmployeeSerializer
 from core.serializers import HistorySerializer
 from core.serializers import DemandSerializer
+from core.match import Match
+from core.notification import send_message_to_customer, send_message_to_employee
 from django.http import QueryDict
 
 class RegisterAPIView(APIView):
@@ -22,7 +24,6 @@ class RegisterAPIView(APIView):
         if not request.data.get("password") or not request.data.get("password_confirm"):
             raise exceptions.APIException("Password or Password Confirm must set.")
         else:
-            print(data)
             return Response(UserService.post("register", data=data))
 
 
@@ -67,7 +68,6 @@ class CreateCustomerView(APIView):
             })
             serializer = CustomerEmployeeSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
-            print(serializer.data)
             publish("customer_created", "customer",serializer.data)
             return Response("Success")
         else:
@@ -75,7 +75,6 @@ class CreateCustomerView(APIView):
 class ListCustomerView(APIView):
     def get(self, request):
         resp = CustomerService.get("customer_list")
-        print(resp)
         return Response(resp)
 
 class CreateProductView(APIView):
@@ -91,7 +90,6 @@ class CreateProductView(APIView):
             })
             serializer = ProductEmployeeSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
-            print(serializer.data)
             publish("product_created", "product", serializer.data)
             return Response("Success")
         else:
@@ -111,7 +109,6 @@ class CreateAdvertView(APIView):
             })
             serializer = AdvertEmployeeSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
-            print(serializer.data)
             publish("advert_created", "product", serializer.data)
             return Response("Success")
         else:
@@ -125,7 +122,6 @@ class CreateHistoryView(APIView):
             })
             serializer = HistorySerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
-            print(serializer.data)
             publish("history_created", "history", serializer.data)
             publish("product_sold", "product", serializer.data.get("property_id"))
             return Response("Success")
@@ -136,7 +132,7 @@ class CreateDemandView(APIView):
         if request.user_ms.get("detail") != "unauthenticated":
             customer_path="customer/" + request.data.get("customer_id")
             customer=CustomerService.get(customer_path)
-            print(customer.get("first_name"))
+            request_raw_data=request.data
             request.data.update({
 
                 "employee_id": request.user_ms.get("id"),
@@ -152,25 +148,36 @@ class CreateDemandView(APIView):
 
                 
             })
+            request_raw_data["customer_first_name"]=customer.get("first_name")
+            request_raw_data["customer_last_name"]=customer.get("last_name")
+            request_raw_data["customer_phone_number"]=customer.get("phone_number")
+            request_raw_data["employee_first_name"]=request.user_ms.get("first_name")
+            request_raw_data["employee_last_name"]=request.user_ms.get("last_name")
+            request_raw_data["employee_phone_number"]=request.user_ms.get("phone_number")
+       
             serializer = DemandSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
-            print(serializer.data)
             publish("demand_created", "demand", serializer.data)
+            products=ProductService.get('product_list')
+            match_rate = Match.product_compare(products, request_raw_data)
+            for i in match_rate:
+                send_message_to_customer(i)
+                send_message_to_employee(i) 
+                
+            
+      
             return Response("Success")
         else:
             return Response("Authentication Required")
 class ListProductView(APIView):
     def get(self, request):
         resp = ProductService.get("product_list")
-        print(resp)
         return Response(resp)
 class ListAdvertView(APIView):
     def get(self, request):
         resp = ProductService.get("advert_list")
-        print(resp)
         return Response(resp)
 class ListHistoryView(APIView):
     def get(self, request):
         resp = HistoryService.get("history_list")
-        print(resp)
         return Response(resp)

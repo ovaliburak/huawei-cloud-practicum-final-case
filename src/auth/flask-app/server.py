@@ -28,7 +28,6 @@ def login():
     cur = conn.cursor()
     cur.execute("SELECT phone_number, password FROM employee_user WHERE phone_number='%s'" % auth.username)
     user_row = cur.fetchone()
-    print(user_row)
     if len(user_row) > 0:
         phone_number = user_row[0]
         password = user_row[1]

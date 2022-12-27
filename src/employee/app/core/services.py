@@ -27,7 +27,6 @@ class CustomerService:
 
     @staticmethod
     def get(path):
-        print(requests.get(CustomerService.endpoint + path))
         return requests.get(CustomerService.endpoint + path).json()
 
 class ProductService:
@@ -35,7 +34,6 @@ class ProductService:
 
     @staticmethod
     def get(path):
-        print(requests.get(ProductService.endpoint + path))
         return requests.get(ProductService.endpoint + path).json()
 
 class HistoryService:
@@ -43,6 +41,5 @@ class HistoryService:
 
     @staticmethod
     def get(path):
-        print(requests.get(HistoryService.endpoint + path))
         return requests.get(HistoryService.endpoint + path).json()
 

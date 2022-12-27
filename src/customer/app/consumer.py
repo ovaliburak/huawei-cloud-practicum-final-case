@@ -18,10 +18,7 @@ channel.queue_declare(queue="customer")
 
 
 def callback(ch, method, properties, body):
-    print(body)
     data = json.loads(body)
-    print(data)
-    print(body)
     if properties.content_type == "customer_created":
         try:
             employee = Employee.objects.get(id=data.get("employee_id"))
