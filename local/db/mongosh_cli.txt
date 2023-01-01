@@ -1,0 +1,2 @@
+db.fs.files.find()
+mp3s> db.fs.files.find({"_id" : ObjectId("6388a9e5bbbb47a1300221a6")})

@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: users-configmap
+data:
+  POSTGRES_HOST: postgres-users
+  POSTGRES_USER: root
+  POSTGRES_DB: users
+  POSTGRES_PORT: "5433"

@@ -1,0 +1,28 @@
+version: "3"
+services:
+  user:
+    depends_on:
+      - postgres_user
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    image: burakovali/users
+    env_file:
+      - ./app/.env
+    ports:
+      - "8000:8000"
+
+  postgres_user:
+    image: postgres
+    restart: always
+    command: -p 5438
+    env_file:
+      - ./app/.env
+    expose:
+      - 5438
+    ports:
+      - "5438:5438"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+volumes:
+  postgres_data:
