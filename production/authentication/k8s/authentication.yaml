@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    description: ''
+  labels:
+    appgroup: ''
+    version: v1
+  name: authentication
+  namespace: app
+spec:
+  selector:
+    matchLabels:
+      app: authentication
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: authentication
+        version: v1
+    spec:
+      containers:
+        - name: authentication
+          image: swr.ap-southeast-3.myhuaweicloud.com/practicum/users:20221229.1
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: postgres-configmap.yaml
+            - secretRef:
+                name: authentication-app-secret
+            - secretRef:
+                name: db-secret
+          env:
+            - name: PAAS_APP_NAME
+              value: authentication
+            - name: PAAS_NAMESPACE
+              value: app
+            - name: PAAS_PROJECT_ID
+              value: 35772050ec54403784aecb2da548a31d
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: 250m
+              memory: 512Mi
+          livenessProbe:
+            tcpSocket:
+              port: 8000
+            initialDelaySeconds: 0
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            tcpSocket:
+              port: 8000
+            initialDelaySeconds: 0
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          startupProbe:
+            tcpSocket:
+              port: 8000
+            initialDelaySeconds: 0
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+      imagePullSecrets:
+        - name: default-secret
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      tolerations:
+        - key: node.kubernetes.io/not-ready
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 300
+        - key: node.kubernetes.io/unreachable
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 300
+      volumes: []
+      initContainers: []
+  replicas: 1
+  revisionHistoryLimit: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  progressDeadlineSeconds: 600
+

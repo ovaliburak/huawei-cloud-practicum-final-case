@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+data:
+  POSTGRES_DB: history
+  POSTGRES_HOST: 10.0.0.163
+  POSTGRES_PORT: '5432'
+metadata:
+  annotations:
+    description: ''
+    originName: history-psql-cm
+    currentVersion: '1'
+  name: history-psql-cm
+  namespace: app
+  labels: {}

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+data:
+  POSTGRES_DB: product
+  POSTGRES_HOST: 10.0.0.163
+  POSTGRES_PORT: '5432'
+metadata:
+  annotations:
+    description: ''
+    originName: product-psql-cm
+    currentVersion: '1'
+  name: product-psql-cm
+  namespace: app
+  labels: {}

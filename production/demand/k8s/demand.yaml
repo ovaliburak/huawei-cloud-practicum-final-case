@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    description: ''
+  labels:
+    appgroup: ''
+    version: v1
+  name: demand
+  namespace: app
+spec:
+  selector:
+    matchLabels:
+      app: demand
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: demand
+        version: v1
+    spec:
+      containers:
+        - name: demand
+          image: swr.ap-southeast-3.myhuaweicloud.com/practicum/demand:20221229.3
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - secretRef:
+                name: db-secret
+            - secretRef:
+                name: customer-secret
+            - configMapRef:
+                name: demand-psql-cm
+          env:
+            - name: PAAS_APP_NAME
+              value: demand
+            - name: PAAS_NAMESPACE
+              value: app
+            - name: PAAS_PROJECT_ID
+              value: 35772050ec54403784aecb2da548a31d
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: 250m
+              memory: 512Mi
+      imagePullSecrets:
+        - name: default-secret
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      tolerations:
+        - key: node.kubernetes.io/not-ready
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 300
+        - key: node.kubernetes.io/unreachable
+          operator: Exists
+          effect: NoExecute
+          tolerationSeconds: 300
+      volumes: []
+      initContainers: []
+  replicas: 1
+  revisionHistoryLimit: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  progressDeadlineSeconds: 600
+

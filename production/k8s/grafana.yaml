@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-lb     #Service name, which can be customized.
+  namespace: monitoring
+  labels:
+    app: grafana
+  annotations:
+    kubernetes.io/elb.id: 2fccf014-798a-4bed-ba24-15df15bc3deb     #Replace it with the ID of the public networkload balancer in the VPC to which the cluster belongs.
+spec:
+  ports:
+    - name: cce-service-0
+      protocol: TCP
+      port: 80     #Service port, which can be customized.
+      targetPort: 3000     #Default port of Grafana. Retain the default value.
+  selector:
+    app: grafana
+  type: LoadBalancer
+
+
